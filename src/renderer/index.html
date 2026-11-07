@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'"
+    />
+    <title>Rivet</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="sprite" aria-hidden="true" width="0" height="0">
+      <symbol id="i-rivet" viewBox="0 0 1024 1024">
+        <path d="M300 856V206h300a150 150 0 0 1 0 300H300" fill="none" stroke="currentColor" stroke-width="95" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M378 512l312 352" fill="none" stroke="currentColor" stroke-width="95" stroke-linecap="round" />
+      </symbol>
+      <symbol id="i-discord" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M19.2 5.6a16 16 0 0 0-3.9-1.2l-.5 1a14.8 14.8 0 0 0-5.6 0l-.5-1A16 16 0 0 0 4.8 5.6C2.4 9.2 1.8 12.7 2.1 16.1a16.3 16.3 0 0 0 4.9 2.5l1-1.7c-.5-.2-1-.5-1.5-.8l.4-.3a11.7 11.7 0 0 0 10.2 0l.4.3c-.5.3-1 .6-1.5.8l1 1.7a16.3 16.3 0 0 0 4.9-2.5c.4-4-.5-7.5-2.7-10.5ZM8.9 14.3c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.2 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"
+        />
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M5 3.4c0-.5.5-.8.9-.5l7 4.6c.4.3.4.8 0 1l-7 4.6c-.4.3-.9 0-.9-.5V3.4Z" />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 16 16">
+        <path d="M4 12 12 4M12 4H5.5M12 4v6.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+    </svg>
+
+    <div class="app">
+      <header class="titlebar">
+        <div class="brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 1024 1024"><use href="#i-rivet" /></svg>
+          </span>
+          <span class="brand-text">
+            <b>RIVET</b>
+            <i>discord rich presence</i>
+          </span>
+          <button class="beta-chip" id="betaChip" type="button" title="What to expect in this build">beta</button>
+        </div>
+
+        <div class="titlebar-right">
+          <button class="discord-pill" type="button" data-invite title="Join the Rivet Discord server">
+            <svg class="icon" viewBox="0 0 24 24"><use href="#i-discord" /></svg>
+            <span>join discord</span>
+          </button>
+          <span class="titlebar-sep"></span>
+          <div class="win-controls">
+            <button class="win-btn" id="winMin" type="button" aria-label="Minimize">
+              <svg viewBox="0 0 10 10" width="10" height="10"><path d="M0 5h10" stroke="currentColor" stroke-width="1" /></svg>
+            </button>
+            <button class="win-btn" id="winMax" type="button" aria-label="Maximize">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <rect x="0.5" y="0.5" width="9" height="9" rx="1" fill="none" stroke="currentColor" stroke-width="1" />
+              </svg>
+            </button>
+            <button class="win-btn win-close" id="winClose" type="button" aria-label="Close">
+              <svg viewBox="0 0 10 10" width="10" height="10">
+                <path d="M0 0l10 10M10 0L0 10" stroke="currentColor" stroke-width="1.1" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <div class="form-col">
+          <div class="sheet">
+            <section class="panel">
+              <div class="panel-head">
+                <span class="idx">01</span>
+                <h2>Application</h2>
+                <span class="rule"></span>
+                <span
+                  class="meta"
+                  id="streamNote"
+                  title="Discord's client rejects the streaming type over RPC, so it is sent as Playing with your stream link as a Watch stream button. Needs a free button slot."
+                  hidden
+                  >sent as playing</span
+                >
+                <button type="button" class="head-link" id="openDevPortal">
+                  developer portal
+                  <svg class="icon xs" viewBox="0 0 16 16"><use href="#i-arrow" /></svg>
+                </button>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="clientId">Client ID <em>required</em></label>
+                <div class="row-control">
+                  <input
+                    id="clientId"
+                    class="mono"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    spellcheck="false"
+                    maxlength="24"
+                    placeholder="123456789012345678"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="activityType">Activity type</label>
+                <div class="row-control">
+                  <div class="type-line" id="typeLine">
+                    <select id="activityType">
+                      <option value="0">Playing</option>
+                      <option value="1">Streaming</option>
+                      <option value="2">Listening to</option>
+                      <option value="3">Watching</option>
+                      <option value="5">Competing in</option>
+                    </select>
+                    <input
+                      id="streamUrl"
+                      class="mono"
+                      autocomplete="off"
+                      spellcheck="false"
+                      maxlength="512"
+                      placeholder="https://twitch.tv/your-channel"
+                      hidden
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="name">Name</label>
+                <div class="row-control">
+                  <input id="name" maxlength="128" autocomplete="off" placeholder="Leave empty to use your app's name" />
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <span class="idx">02</span>
+                <h2>Text</h2>
+                <span class="rule"></span>
+                <span class="meta">128 characters</span>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="details">Details</label>
+                <div class="row-control">
+                  <div class="pair">
+                    <input id="details" maxlength="128" autocomplete="off" placeholder="Well hello there~" />
+                    <input id="detailsUrl" class="mono soft" autocomplete="off" spellcheck="false" placeholder="link (optional)" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="state">State</label>
+                <div class="row-control">
+                  <div class="pair">
+                    <input id="state" maxlength="128" autocomplete="off" placeholder="My local time: 21:04" />
+                    <input id="stateUrl" class="mono soft" autocomplete="off" spellcheck="false" placeholder="link (optional)" />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <span class="idx">03</span>
+                <h2>Timer</h2>
+                <span class="rule"></span>
+                <span class="meta">local time</span>
+              </div>
+
+              <div class="row">
+                <span class="row-label">Counts</span>
+                <div class="row-control">
+                  <div class="seg">
+                    <label class="seg-item">
+                      <input type="radio" name="timestampMode" value="none" checked />
+                      <span>Nothing</span>
+                    </label>
+                    <label class="seg-item">
+                      <input type="radio" name="timestampMode" value="since-connect" />
+                      <span>Since connect</span>
+                    </label>
+                    <label class="seg-item">
+                      <input type="radio" name="timestampMode" value="custom" />
+                      <span>Range</span>
+                    </label>
+                  </div>
+                  <div class="times" id="customTimes" aria-disabled="true">
+                    <label class="mini">
+                      <span>Start</span>
+                      <input id="startTime" type="datetime-local" step="1" />
+                    </label>
+                    <label class="mini">
+                      <span>End</span>
+                      <input id="endTime" type="datetime-local" step="1" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <span class="idx">04</span>
+                <h2>Artwork</h2>
+                <span class="rule"></span>
+                <span class="meta">asset key or https url</span>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="largeImage">Large image</label>
+                <div class="row-control">
+                  <div class="pair">
+                    <div class="input-with-thumb">
+                      <img class="thumb" id="largeThumb" alt="" hidden />
+                      <input id="largeImage" autocomplete="off" spellcheck="false" placeholder="asset key or https://…" />
+                    </div>
+                    <input id="largeText" class="soft" maxlength="128" autocomplete="off" placeholder="hover text" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="smallImage">Small image</label>
+                <div class="row-control">
+                  <div class="pair">
+                    <div class="input-with-thumb">
+                      <img class="thumb" id="smallThumb" alt="" hidden />
+                      <input id="smallImage" autocomplete="off" spellcheck="false" placeholder="asset key or https://…" />
+                    </div>
+                    <input id="smallText" class="soft" maxlength="128" autocomplete="off" placeholder="hover text" />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <span class="idx">05</span>
+                <h2>Extras</h2>
+                <span class="rule"></span>
+                <span class="meta">buttons can be hidden</span>
+              </div>
+
+              <div class="row">
+                <span class="row-label">Party size</span>
+                <div class="row-control">
+                  <div class="party">
+                    <input id="partyCurrent" class="narrow mono" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="2" />
+                    <span class="of">of</span>
+                    <input id="partyMax" class="narrow mono" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="5" />
+                    <span class="note inline">leave both empty to hide</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="button1Text">Button 1</label>
+                <div class="row-control">
+                  <div class="pair">
+                    <input id="button1Text" maxlength="32" autocomplete="off" placeholder="Label" />
+                    <input id="button1Url" class="mono soft" autocomplete="off" spellcheck="false" placeholder="https://…" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="row-label" for="button2Text">Button 2</label>
+                <div class="row-control">
+                  <div class="pair">
+                    <input id="button2Text" maxlength="32" autocomplete="off" placeholder="Label" />
+                    <input id="button2Url" class="mono soft" autocomplete="off" spellcheck="false" placeholder="https://…" />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <aside class="preview-col">
+          <div class="col-head">
+            <span class="col-title">Preview</span>
+            <span class="col-hint">approx. what friends see</span>
+          </div>
+
+          <div class="dc-card">
+            <div class="dc-banner">
+              <span class="dc-banner-grid"></span>
+              <span class="dc-banner-glow"></span>
+            </div>
+            <div class="dc-avatar-wrap">
+              <div class="dc-avatar" id="pvAvatar">
+                <img id="pvAvatarImg" alt="" hidden />
+                <span id="pvAvatarInitial">R</span>
+              </div>
+              <span class="dc-presence"></span>
+            </div>
+            <div class="dc-body">
+              <div class="dc-name" id="pvUser">your profile</div>
+              <div class="dc-tag" id="pvTag">not linked yet</div>
+
+              <div class="activity" id="pvActivity">
+                <div class="activity-verb" id="pvVerb">Playing a game</div>
+                <div class="activity-main">
+                  <div class="activity-art">
+                    <img id="pvLarge" alt="" hidden />
+                    <div class="art-fallback" id="pvLargeFallback">R</div>
+                    <img class="activity-art-small" id="pvSmall" alt="" hidden />
+                    <span class="activity-art-small-fallback" id="pvSmallFallback" hidden></span>
+                  </div>
+                  <div class="activity-text">
+                    <div class="activity-name" id="pvName">Your app name</div>
+                    <div class="activity-details" id="pvDetails">Details line</div>
+                    <div class="activity-state">
+                      <span id="pvState">State line</span>
+                      <span class="activity-party" id="pvParty"></span>
+                    </div>
+                    <div class="activity-time" id="pvTime"></div>
+                  </div>
+                </div>
+                <div class="activity-buttons" id="pvButtons"></div>
+              </div>
+
+              <div class="preview-foot">
+                <span class="pulse-dot"></span>
+                <span id="pvFootText">Waiting for an application ID</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="preview-note">
+            Name and avatar are read from your Discord account when the connection opens. The app name and
+            artwork come from the Discord application that owns your client ID.
+          </p>
+
+          <div class="side-card">
+            <button class="side-row" type="button" data-invite>
+              <svg class="icon" viewBox="0 0 24 24"><use href="#i-discord" /></svg>
+              <span class="side-key">community</span>
+              <span class="side-val">join the Discord</span>
+              <svg class="icon xs" viewBox="0 0 16 16"><use href="#i-arrow" /></svg>
+            </button>
+            <button class="side-row" type="button" data-portal>
+              <span class="side-key">app setup</span>
+              <span class="side-val">developer portal</span>
+              <svg class="icon xs" viewBox="0 0 16 16"><use href="#i-arrow" /></svg>
+            </button>
+            <div class="side-row static">
+              <span class="side-key">invite</span>
+              <span class="side-val mono selectable">discord.gg/dkDhWNYY4Z</span>
+            </div>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="actionbar">
+        <button class="btn primary" id="btnConnect" type="button">
+          <svg class="icon sm" viewBox="0 0 16 16"><use href="#i-play" /></svg>
+          <span>Connect</span>
+        </button>
+        <button class="btn secondary" id="btnUpdate" type="button" disabled>Update</button>
+        <button class="btn ghost" id="btnDisconnect" type="button" disabled>Disconnect</button>
+        <span class="spacer"></span>
+        <span class="hint">ctrl + enter</span>
+        <button class="btn text" id="btnClear" type="button" disabled>Clear presence</button>
+      </footer>
+
+      <footer class="statusbar">
+        <div class="status-left">
+          <span class="dot disconnected" id="statusDot"></span>
+          <span class="status-text" id="statusText">Not connected</span>
+          <span class="status-detail" id="statusDetail"></span>
+        </div>
+        <div class="status-right">
+          <span id="statusMeta">v1.1.0</span>
+          <span class="status-sep">·</span>
+          <span>beta</span>
+        </div>
+      </footer>
+    </div>
+
+    <div class="modal-backdrop" id="betaModal" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="betaTitle">
+        <div class="modal-head">
+          <span class="brand-mark small">
+            <svg viewBox="0 0 1024 1024"><use href="#i-rivet" /></svg>
+          </span>
+          <span class="modal-tag">Rivet · beta build</span>
+          <span class="rule"></span>
+          <span class="modal-head-note">read once</span>
+        </div>
+
+        <h1 id="betaTitle">This is a beta, so things will break</h1>
+        <p class="modal-lead">
+          Rivet sets your Discord presence over the local RPC socket. The core flow works. The edges are still
+          rough: a stale presence, a layout that clips, a reconnect after Discord restarts. If something
+          misbehaves, hit <em>Update</em> once, and if that fails, reconnect.
+        </p>
+
+        <ol class="modal-list">
+          <li>
+            <div>
+              <b>Discord desktop has to be running.</b>
+              <span>Browser and mobile clients can't receive RPC at all. If Rivet says it can't connect, restart Discord once and retry.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>You need your own application ID.</b>
+              <span>Make a free app in the Discord developer portal and paste its ID. Its name and uploaded assets are what people see.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>Images are the flakiest part.</b>
+              <span>Use an asset key from your app or a direct https link. Some hosts are blocked or slow to resolve.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <b>Buttons and streaming are up to Discord.</b>
+              <span>Link buttons are hidden for some accounts, and Discord refuses the streaming type over RPC — Rivet sends Playing plus a Watch stream button instead.</span>
+            </div>
+          </li>
+        </ol>
+
+        <p class="modal-foot">
+          Nothing here touches your account credentials — it only talks to the Discord client already running on this PC.
+        </p>
+
+        <div class="modal-actions">
+          <button class="btn invite" type="button" data-invite>
+            <svg class="icon sm" viewBox="0 0 24 24"><use href="#i-discord" /></svg>
+            <span>Join the Discord</span>
+          </button>
+          <span class="spacer"></span>
+          <label class="check">
+            <input type="checkbox" id="betaDismiss" />
+            <span>Don't show this again</span>
+          </label>
+          <button class="btn primary" id="betaAccept" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

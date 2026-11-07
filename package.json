@@ -1,0 +1,29 @@
+{
+  "name": "rivet-rpc",
+  "productName": "Rivet",
+  "version": "1.1.0",
+  "description": "Rivet — a desktop app that sets a fully custom Discord Rich Presence.",
+  "author": "Rivet",
+  "license": "MIT",
+  "homepage": "https://discord.gg/dkDhWNYY4Z",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "dev": "node scripts/build.mjs --watch",
+    "start": "npm run build && electron .",
+    "icon": "electron scripts/make-icon.cjs",
+    "pack": "npm run build && electron-builder --win portable",
+    "dist": "npm run build && electron-builder --win nsis portable"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.9.0"
+  }
+}

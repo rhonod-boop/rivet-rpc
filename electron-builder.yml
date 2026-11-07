@@ -1,0 +1,42 @@
+appId: com.rivet.rpc
+productName: Rivet
+copyright: Copyright © 2026 Rivet
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - package.json
+  - "!**/*.map"
+
+asar: true
+compression: normal
+# Electron ships ~50 locales; the app only ever renders English.
+electronLanguages:
+  - en-US
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  icon: build/icon.ico
+  artifactName: Rivet-${version}-Setup.${ext}
+
+portable:
+  artifactName: Rivet-${version}-portable.exe
+  requestExecutionLevel: user
+  # Keeps the extracted copy between launches so only the first start pays for unpacking.
+  unpackDirName: RivetRPC
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Rivet
+  deleteAppDataOnUninstall: false
