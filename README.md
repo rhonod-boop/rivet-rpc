@@ -11,7 +11,8 @@ remembers your settings between launches. The preview is your own account: name 
 from the Discord client over the same handshake that sets the presence, and are cached so they
 are there before you reconnect.
 
-**[Join the Rivet Discord](https://discord.gg/dkDhWNYY4Z)** for builds, bug reports and presets.
+**[Download the latest build](https://github.com/rhonod-boop/rivet-rpc/releases/latest)** — installer or
+portable exe. **[Join the Rivet Discord](https://discord.gg/dkDhWNYY4Z)** for builds, bug reports and presets.
 
 ## What it does
 
